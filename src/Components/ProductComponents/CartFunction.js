@@ -1,4 +1,4 @@
-import { firestoreDB } from "../Firebase/Firebase";
+import { firestoreDB } from "../../Firebase/Firebase";
 import { getDoc, doc, updateDoc, setDoc } from "firebase/firestore";
 
 const addToCart = async (userId, productId) => {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { firestoreDB } from "../Firebase/Firebase";
+import { firestoreDB } from "../../Firebase/Firebase";
 import { doc, getDoc } from "firebase/firestore";
-import Navbar from "../Include/Navbar";
+import Navbar from "../../Include/Navbar";
 import { FaAngleRight } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 

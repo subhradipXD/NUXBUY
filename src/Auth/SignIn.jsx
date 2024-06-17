@@ -1,7 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../Firebase/Firebase";
 const SignIn = () => {
@@ -13,6 +14,10 @@ const SignIn = () => {
 
     const auth = getAuth(app);
     const handleSignIn = async () => {
+        if (email === "" || password === "") {
+            toast.error("Please fill the form properly!");
+            return;
+        }
         setLoading(true);
         try {
             const userCredential = await signInWithEmailAndPassword(
@@ -41,10 +46,12 @@ const SignIn = () => {
             <ToastContainer />
             <div className="flex flex-col items-center justify-center h-screen p-10 text-black rounded-md">
                 <div className="flex flex-col items-center space-y-4">
+                    <h1 className=" text-3xl font-bold text-blue-600 ">Welcome to <span className=" italic">NEXBUY</span> we are happy to have you back!</h1>
+
                     <h1 className="text-2xl font-bold text-black">Sign In</h1>
                     <div className="flex flex-col mt-5 space-y-2 w-96">
                         <label className="text-lg font-semibold text-indigo-500">
-                            Username
+                            Email
                         </label>
                         <input
                             type="text"
@@ -80,6 +87,8 @@ const SignIn = () => {
                         >
                             {loading ? "Loading" : "Sign In"}
                         </button>
+                        <Link to="/" className=" text-blue-700 underline hover:text-blue-900">Don't have an Account? Please Sign Up -{">"} </Link>
+
                     </div>
                 </div>
             </div>

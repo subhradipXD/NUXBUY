@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../Include/Navbar';
+import Navbar from '../../Include/Navbar';
 import { getCartItems, incrementQuantity, decrementQuantity, removeItem } from './CartFunction';
 import axios from 'axios';
 import { RiDeleteBin6Line } from "react-icons/ri";

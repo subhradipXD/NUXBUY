@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../Include/Navbar';
+import Navbar from '../../Include/Navbar';
 import { addToCart } from './CartFunction';
 import { useNavigate } from 'react-router-dom';
 const AllProducts = () => {
@@ -63,6 +63,9 @@ const AllProducts = () => {
         return (
             <>
                 <Navbar />
+                <h1 className=" text-center text-3xl font-bold pt-4 text-blue-600 ">
+                    Welcome to <span className=" italic">NEXBUY</span> make your next buy with us!
+                </h1>
                 <div className="flex justify-center items-center h-screen">
                     <div className="text-center">Loading...</div>
                 </div>
@@ -75,7 +78,10 @@ const AllProducts = () => {
             <Navbar />
             <ToastContainer />
             <div className="container mx-auto p-4">
-                <div className="flex justify-center mb-4">
+                <h1 className=" text-center text-3xl font-bold text-blue-600 ">
+                    Welcome to <span className=" italic">NEXBUY</span> make your next buy with us!
+                </h1>
+                <div className="flex justify-center m-4">
                     <label htmlFor="category-select" className="mr-2">Select Category:</label>
                     <select
                         id="category-select"

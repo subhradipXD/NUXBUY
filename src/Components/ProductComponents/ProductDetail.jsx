@@ -3,7 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navbar from '../Include/Navbar';
+import Navbar from '../../Include/Navbar';
 import { addToCart } from './CartFunction';
 
 const ProductDetail = () => {
