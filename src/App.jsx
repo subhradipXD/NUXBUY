@@ -5,6 +5,7 @@ import Cart from './Components/Cart';
 import SignUp from './Auth/SignUp';
 import SignIn from './Auth/SignIn';
 import Account from './Components/Account';
+import UpdateProfile from './Components/ProfileComponents/UpdateProfile';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/account/update" element={<UpdateProfile />} />
       </Routes>
     </Router>
   );

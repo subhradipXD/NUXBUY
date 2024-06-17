@@ -6,7 +6,6 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 const SignUp = () => {
     const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -24,7 +23,6 @@ const SignUp = () => {
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredentials.user;
             await setDoc(doc(firestoreDB, "users", user.uid), {
-                username: username,
                 email: email,
                 id: user.uid,
                 firstName: firstName,
@@ -35,12 +33,17 @@ const SignUp = () => {
                 zipcode: zipcode,
                 phone_no: phone,
             });
-            await setDoc(doc(firestoreDB, "cart", user.uid), {
-                cart: [],
+            await setDoc(doc(firestoreDB, "carts", user.uid), {
+                products: {}
             });
+            // await setDoc(doc(firestoreDB, "cart", user.uid), {
+            //     cart: { prod_id: [], quantity: [] },
+            // });
+            // await setDoc(doc(firestoreDB, "orders", user.uid), {
+            //     cart: { prod_id: [], quantity: [], amount: "" },
+            // });
             toast.success("Signup successful! Please Login");
             setEmail("");
-            setUsername("");
             setPassword("");
             setFirstName("");
             setLastName("");
@@ -64,17 +67,6 @@ const SignUp = () => {
                 <div className="flex flex-col items-center space-y-4">
                     <h1 className="text-2xl font-bold text-black">Sign Up</h1>
                     <div className="flex flex-col mt-5 space-y-2 w-96">
-                        <label className="text-lg font-semibold text-indigo-500">
-                            Username
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Enter Your Username"
-                            required
-                            className="p-1 pl-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            onChange={(e) => setUsername(e.target.value)}
-                            value={username}
-                        />
                         <label className="text-lg font-semibold text-indigo-500">
                             Email
                         </label>

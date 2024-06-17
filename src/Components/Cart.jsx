@@ -1,74 +1,107 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../Include/Navbar';
-import logo from "../assets/Black White Minimalist Logo.png"
+import { getCartItems, incrementQuantity, decrementQuantity, removeItem } from './CartFunction';
+import axios from 'axios';
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FaPlus, FaMinus } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-    // Sample cart data
-    const [cartItems, setCartItems] = useState([
-        { id: 1, title: 'Product 1', price: 10, quantity: 1 },
-        { id: 2, title: 'Product 2', price: 20, quantity: 2 },
-        { id: 3, title: 'Product 3', price: 15, quantity: 1 },
-    ]);
+    const navigate = useNavigate();
+    const userId = localStorage.getItem("userid");
+    if (!userId) {
+        navigate("/");
+    }
+    const [cartItems, setCartItems] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Calculate total amount
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            if (userId) {
+                const cartProducts = await getCartItems(userId);
+                const productIds = Object.keys(cartProducts);
+
+                const products = await Promise.all(productIds.map(async (id) => {
+                    const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
+                    return {
+                        id,
+                        ...response.data,
+                        quantity: cartProducts[id]
+                    };
+                }));
+
+                setCartItems(products);
+            }
+            setLoading(false);
+        };
+
+        fetchCartItems();
+    }, [userId]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="text-center">Loading...</div>
+            </div>
+        );
+    }
+
+    const handleIncrement = async (productId) => {
+        await incrementQuantity(userId, productId);
+        setCartItems(cartItems.map(item => item.id === productId ? { ...item, quantity: item.quantity + 1 } : item));
+    };
+
+    const handleDecrement = async (productId) => {
+        await decrementQuantity(userId, productId);
+        setCartItems(cartItems.map(item =>
+            item.id === productId ? { ...item, quantity: item.quantity > 1 ? item.quantity - 1 : 1 } : item
+        ).filter(item => item.quantity > 0));
+    };
+
+    const handleRemove = async (productId) => {
+        await removeItem(userId, productId);
+        setCartItems(cartItems.filter(item => item.id !== productId));
+    };
+
     const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-    // Increment quantity
-    const incrementQuantity = (id) => {
-        setCartItems(cartItems.map(item =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-        ));
-    };
-
-    // Decrement quantity
-    const decrementQuantity = (id) => {
-        setCartItems(cartItems.map(item =>
-            item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-        ));
-    };
-
-    // Remove item from cart
-    const removeItem = (id) => {
-        setCartItems(cartItems.filter(item => item.id !== id));
-    };
 
     return (
         <>
             <Navbar />
             <div className="container mx-auto p-4">
                 <div className="flex justify-between items-center mb-4">
-                    <div className="text-xl font-semibold">Total Amount: ${totalAmount}</div>
+                    <div className="text-xl font-semibold">Total Amount: ${totalAmount.toFixed(2)}</div>
                     <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors duration-300">
                         Buy Now
                     </button>
                 </div>
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {cartItems.map((item) => (
-                        <div key={item.id} className="bg-white rounded-lg shadow-md p-4 flex justify-between items-center">
+                        <div key={item.id} className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-between items-center hover:shadow-2xl transition-shadow duration-300">
                             <div>
-                                <img src={logo} alt="/" className=" w-44 border border-black object-cover rounded-lg mb-4" />
-                                <h2 className="text-lg font-bold">{item.title}</h2>
-                                <p className="text-gray-700">Price: ${item.price}</p>
-                                <p className="text-gray-700">Quantity: {item.quantity}</p>
+                                <img src={item.image} alt={item.title} className="w-44 border border-black object-cover rounded-lg mb-4" />
+                                <h2 className="text-md">{item.title}</h2>
+                                <p className="text-gray-700 text-sm">Price: ${item.price}</p>
+                                <p className="text-gray-700 text-sm">Quantity: {item.quantity}</p>
                             </div>
-                            <div className="flex space-x-4">
+                            <div className="flex space-x-4 mt-4">
                                 <button
-                                    onClick={() => incrementQuantity(item.id)}
+                                    onClick={() => handleIncrement(item.id)}
                                     className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors duration-300"
                                 >
-                                    +
+                                    <FaPlus />
                                 </button>
                                 <button
-                                    onClick={() => decrementQuantity(item.id)}
+                                    onClick={() => handleDecrement(item.id)}
                                     className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 transition-colors duration-300"
                                 >
-                                    -
+                                    <FaMinus />
                                 </button>
                                 <button
-                                    onClick={() => removeItem(item.id)}
+                                    onClick={() => handleRemove(item.id)}
                                     className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition-colors duration-300"
                                 >
-                                    Remove Item
+                                    <RiDeleteBin6Line />
                                 </button>
                             </div>
                         </div>

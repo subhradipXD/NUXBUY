@@ -1,9 +1,19 @@
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../Include/Navbar';
-
+import { addToCart } from './CartFunction';
+import { useNavigate } from 'react-router-dom';
 const AllProducts = () => {
+    const navigate = useNavigate();
+    const userId = localStorage.getItem("userid");
+    if (!userId) {
+        navigate("/");
+    }
+
+
     const [products, setProducts] = useState(null);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -39,6 +49,16 @@ const AllProducts = () => {
         setSelectedCategory(e.target.value);
     };
 
+    const handleAddToCart = async (productId) => {
+
+        const added = await addToCart(userId, productId);
+        if (added) {
+            toast.success("Product added to cart successfully");
+        } else {
+            console.log("Failed to add product to cart");
+        }
+    };
+
     if (!products) {
         return (
             <>
@@ -53,8 +73,8 @@ const AllProducts = () => {
     return (
         <>
             <Navbar />
+            <ToastContainer />
             <div className="container mx-auto p-4">
-                {/* Dropdown menu */}
                 <div className="flex justify-center mb-4">
                     <label htmlFor="category-select" className="mr-2">Select Category:</label>
                     <select
@@ -70,29 +90,33 @@ const AllProducts = () => {
                     </select>
                 </div>
 
-                {/* Grid of products */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {products.map((product) => (
-                        <Link key={product.id} to={`/product/${product.id}`}>
-                            <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-2xl transition-shadow duration-300">
+                        <div key={product.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-2xl transition-shadow duration-300">
+                            <Link to={`/product/${product.id}`}>
                                 <img src={product.image} alt={product.title} className="w-full h-48 object-cover rounded-t-lg mb-4" />
                                 <h2 className="text-md mb-2">{product.title}</h2>
                                 <p className="text-xl font-semibold text-green-600 mb-4">Price: ${product.price}</p>
-                                <div className="flex space-x-4">
-                                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300">
-                                        Add to Cart
-                                    </button>
-                                    <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors duration-300">
-                                        Buy Now
-                                    </button>
-                                </div>
+                            </Link>
+                            <div className="flex space-x-4">
+                                <button
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-300"
+                                    onClick={() => handleAddToCart(product.id)}
+                                >
+                                    Add to Cart
+                                </button>
+                                <button
+                                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors duration-300"
+                                >
+                                    Buy Now
+                                </button>
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             </div>
         </>
     );
-}
+};
 
 export default AllProducts;
