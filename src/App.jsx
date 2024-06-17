@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import AllProducts from './Components/AllProducts';
-import ProductDetail from './Components/ProductDetail';
-import Cart from './Components/Cart';
+import AllProducts from "./Components/ProductComponents/AllProducts"
+import ProductDetail from './Components/ProductComponents/ProductDetail';
+import Cart from './Components/ProductComponents/Cart';
 import SignUp from './Auth/SignUp';
 import SignIn from './Auth/SignIn';
-import Account from './Components/Account';
+import Account from './Components/ProfileComponents/Account';
 import UpdateProfile from './Components/ProfileComponents/UpdateProfile';
 
 const App = () => {
