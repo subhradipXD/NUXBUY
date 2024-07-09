@@ -61,7 +61,7 @@ const ProductDetail = () => {
                     <img src={product.image} alt={product.title} className="w-52 border border-black object-cover rounded-lg mb-4" />
                     <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
                     <p className="text-gray-700 mb-4">{product.description}</p>
-                    <p className="text-xl font-semibold text-green-600 mb-4">Price: ${product.price}</p>
+                    <p className="text-xl font-semibold text-green-600 mb-4">Price: ₹{product.price}</p>
                     <div className="flex space-x-4">
                         <button
                             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"

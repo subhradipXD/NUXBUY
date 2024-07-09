@@ -71,4 +71,9 @@ const removeItem = async (userId, productId) => {
     await updateCart(userId, products);
 };
 
-export { addToCart, getCartItems, incrementQuantity, decrementQuantity, removeItem };
+const clearCart = async (userId) => {
+    const cartDocRef = doc(firestoreDB, "carts", userId);
+    await setDoc(cartDocRef, { products: {} });
+};
+
+export { addToCart, getCartItems, incrementQuantity, decrementQuantity, removeItem, clearCart };

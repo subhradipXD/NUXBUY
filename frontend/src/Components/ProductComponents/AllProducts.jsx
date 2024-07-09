@@ -102,7 +102,7 @@ const AllProducts = () => {
                             <Link to={`/product/${product.id}`}>
                                 <img src={product.image} alt={product.title} className="w-full h-48 object-cover rounded-t-lg mb-4" />
                                 <h2 className="text-md mb-2">{product.title}</h2>
-                                <p className="text-xl font-semibold text-green-600 mb-4">Price: ${product.price}</p>
+                                <p className="text-xl font-semibold text-green-600 mb-4">Price: ₹{product.price}</p>
                             </Link>
                             <div className="flex space-x-4">
                                 <button
