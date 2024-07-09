@@ -61,12 +61,10 @@ const SignUp = () => {
             await setDoc(doc(firestoreDB, "carts", user.uid), {
                 products: {}
             });
-            // await setDoc(doc(firestoreDB, "cart", user.uid), {
-            //     cart: { prod_id: [], quantity: [] },
-            // });
-            // await setDoc(doc(firestoreDB, "orders", user.uid), {
-            //     cart: { prod_id: [], quantity: [], amount: "" },
-            // });
+            await setDoc(doc(firestoreDB, "orders", user.uid), {
+                orders: {}
+            });
+
             toast.success("Signup successful! Please Login");
             setEmail("");
             setPassword("");

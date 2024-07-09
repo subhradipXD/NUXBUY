@@ -6,6 +6,7 @@ import SignUp from './Auth/SignUp';
 import SignIn from './Auth/SignIn';
 import Account from './Components/ProfileComponents/Account';
 import UpdateProfile from './Components/ProfileComponents/UpdateProfile';
+import Orders from './Components/ProfileComponents/Orders';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/account" element={<Account />} />
         <Route path="/account/update" element={<UpdateProfile />} />
+        <Route path="/account/orders" element={<Orders />} />
       </Routes>
     </Router>
   );

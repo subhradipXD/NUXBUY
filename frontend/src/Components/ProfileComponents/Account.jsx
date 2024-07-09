@@ -72,11 +72,14 @@ const Account = () => {
                             </div>
                         )}
                     </Link>
-                    {userData && (
-                        <div className="flex flex-col mt-5 space-y-2 w-auto h-auto border border-black rounded-md shadow-md hover:shadow-2xl transition-shadow duration-300">
-                            <strong className="flex items-center p-10">Order Details <FaAngleRight className="ml-2" /></strong>
-                        </div>
-                    )}
+                    <Link to={`/account/orders`}>
+                        {userData && (
+                            <div className="flex flex-col mt-5 space-y-2 w-auto h-auto border border-black rounded-md shadow-md hover:shadow-2xl transition-shadow duration-300">
+                                <strong className="flex items-center p-10">Order Details <FaAngleRight className="ml-2" /></strong>
+                            </div>
+                        )}
+                    </Link>
+
                 </div>
             </div>
         </>

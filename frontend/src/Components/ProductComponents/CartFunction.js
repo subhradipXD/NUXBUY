@@ -1,5 +1,5 @@
 import { firestoreDB } from "../../Firebase/Firebase";
-import { getDoc, doc, updateDoc, setDoc } from "firebase/firestore";
+import { getDoc, doc, updateDoc, setDoc, collection } from "firebase/firestore";
 
 const addToCart = async (userId, productId) => {
     try {
@@ -30,7 +30,6 @@ const addToCart = async (userId, productId) => {
         return false;
     }
 };
-
 
 const getCartItems = async (userId) => {
     const cartDocRef = doc(firestoreDB, "carts", userId);
@@ -76,4 +75,24 @@ const clearCart = async (userId) => {
     await setDoc(cartDocRef, { products: {} });
 };
 
-export { addToCart, getCartItems, incrementQuantity, decrementQuantity, removeItem, clearCart };
+const order = async (userId, orderDetails) => {
+    try {
+        const orderDate = new Date().toISOString();
+        const orderData = {
+            date: orderDate,
+            products: orderDetails,
+        };
+
+        const userOrdersCollectionRef = collection(firestoreDB, "orders", userId, "userOrders");
+        const dateTimeDocRef = doc(userOrdersCollectionRef, orderDate);
+        await setDoc(dateTimeDocRef, orderData);
+
+        console.log(`Order placed for user ${userId} on ${orderDate}`);
+        return true;
+    } catch (error) {
+        console.error("Error placing order:", error);
+        return false;
+    }
+};
+
+export { addToCart, getCartItems, incrementQuantity, decrementQuantity, removeItem, clearCart, order };

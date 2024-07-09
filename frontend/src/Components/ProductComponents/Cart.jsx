@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../../Include/Navbar';
-import { getCartItems, incrementQuantity, decrementQuantity, removeItem, clearCart } from './CartFunction';
+import { getCartItems, incrementQuantity, decrementQuantity, removeItem, clearCart, order } from './CartFunction';
 import axios from 'axios';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaPlus, FaMinus } from "react-icons/fa6";
@@ -95,14 +95,13 @@ const Cart = () => {
                 "order_id": res.data.id,
                 "handler": async function (response) {
                     toast.success("Payment Successful");
+                    await order(userId, cartItems.reduce((acc, item) => {
+                        acc[item.id] = item.quantity;
+                        return acc;
+                    }, {}));
                     await clearCart(userId);
                     setCartItems([]);
                 },
-                // "prefill": {
-                //     "name": "Gaurav Kumar",
-                //     "email": "gaurav.kumar@example.com",
-                //     "contact": "9000090000"
-                // },
                 "notes": {
                     "address": "Razorpay Corporate Office"
                 },
@@ -120,7 +119,6 @@ const Cart = () => {
             console.log(error);
             toast.error("An error occurred while processing the payment");
         }
-
     };
 
 
