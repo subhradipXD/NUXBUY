@@ -3,7 +3,7 @@ import Navbar from "../../Include/Navbar";
 import { firestoreDB } from "../../Firebase/Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const getUserOrders = async (userId) => {
     const userOrdersCollectionRef = collection(firestoreDB, "orders", userId, "userOrders");
@@ -29,6 +29,7 @@ function Orders() {
         const fetchOrders = async () => {
             try {
                 const ordersData = await getUserOrders(userId);
+                console.log(ordersData);
                 const productsPromises = ordersData.map(async (order) => {
                     const productIds = Object.keys(order.products);
                     const products = await Promise.all(productIds.map(async (id) => {
@@ -68,7 +69,7 @@ function Orders() {
             <div className="container mx-auto p-4">
                 <h1 className="text-2xl font-bold mb-4">My Orders</h1>
                 {orders.length === 0 ? (
-                    <div className="text-center">No orders found.</div>
+                    <div className="text-center text-2xl">No orders found.</div>
                 ) : (
                     <div className="space-y-4">
                         {orders.map((order) => {
@@ -87,9 +88,15 @@ function Orders() {
                                             </div>
                                         ))}
                                     </div>
+                                    <Link to={`/account/orders/order_details?id=${order.id}`}>
+                                        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 my-2">
+                                            View Details
+                                        </button>
+                                    </Link>
                                 </div>
                             );
                         })}
+
                     </div>
                 )}
             </div>

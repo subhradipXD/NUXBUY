@@ -1,5 +1,6 @@
 import { firestoreDB } from "../../Firebase/Firebase";
 import { getDoc, doc, updateDoc, setDoc, collection } from "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 const addToCart = async (userId, productId) => {
     try {
@@ -75,12 +76,16 @@ const clearCart = async (userId) => {
     await setDoc(cartDocRef, { products: {} });
 };
 
-const order = async (userId, orderDetails) => {
+const order = async (userId, orderDetails, razorpayOrderId, razorpayPaymentId) => {
     try {
         const orderDate = new Date().toISOString();
+        const orderId = uuidv4(); // Generate a unique order ID
         const orderData = {
             date: orderDate,
             products: orderDetails,
+            orderId: orderId,
+            razorpayOrderId: razorpayOrderId,
+            razorpayPaymentId: razorpayPaymentId
         };
 
         const userOrdersCollectionRef = collection(firestoreDB, "orders", userId, "userOrders");
@@ -94,5 +99,6 @@ const order = async (userId, orderDetails) => {
         return false;
     }
 };
+
 
 export { addToCart, getCartItems, incrementQuantity, decrementQuantity, removeItem, clearCart, order };

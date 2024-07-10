@@ -98,7 +98,7 @@ const Cart = () => {
                     await order(userId, cartItems.reduce((acc, item) => {
                         acc[item.id] = item.quantity;
                         return acc;
-                    }, {}));
+                    }, {}), res.data.id, response.razorpay_payment_id);
                     await clearCart(userId);
                     setCartItems([]);
                 },

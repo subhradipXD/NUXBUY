@@ -7,6 +7,7 @@ import SignIn from './Auth/SignIn';
 import Account from './Components/ProfileComponents/Account';
 import UpdateProfile from './Components/ProfileComponents/UpdateProfile';
 import Orders from './Components/ProfileComponents/Orders';
+import OrderDetails from './Components/ProfileComponents/OrderDetails';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/account" element={<Account />} />
         <Route path="/account/update" element={<UpdateProfile />} />
         <Route path="/account/orders" element={<Orders />} />
+        <Route path="/account/orders/order_details" element={<OrderDetails />} />
       </Routes>
     </Router>
   );
