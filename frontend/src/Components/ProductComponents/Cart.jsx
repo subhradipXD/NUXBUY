@@ -84,7 +84,7 @@ const Cart = () => {
                 currency: "INR",
                 receipt: receiptID,
             });
-            console.log(res);
+
             var options = {
                 "key": "rzp_test_EpbRjbttPkoBKV",
                 amount,
@@ -94,13 +94,24 @@ const Cart = () => {
                 "image": logo,
                 "order_id": res.data.id,
                 "handler": async function (response) {
-                    toast.success("Payment Successful");
-                    await order(userId, cartItems.reduce((acc, item) => {
-                        acc[item.id] = item.quantity;
-                        return acc;
-                    }, {}), res.data.id, response.razorpay_payment_id);
-                    await clearCart(userId);
-                    setCartItems([]);
+                    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
+                    const verificationResponse = await axios.post('http://localhost:6969/verify', {
+                        razorpay_order_id,
+                        razorpay_payment_id,
+                        razorpay_signature,
+                    });
+
+                    if (verificationResponse.data.success) {
+                        toast.success("Payment Successful");
+                        await order(userId, cartItems.reduce((acc, item) => {
+                            acc[item.id] = item.quantity;
+                            return acc;
+                        }, {}), res.data.id, response.razorpay_payment_id);
+                        await clearCart(userId);
+                        setCartItems([]);
+                    } else {
+                        toast.error("Payment verification failed");
+                    }
                 },
                 "notes": {
                     "address": "Razorpay Corporate Office"
@@ -120,6 +131,7 @@ const Cart = () => {
             toast.error("An error occurred while processing the payment");
         }
     };
+
 
 
     return (
